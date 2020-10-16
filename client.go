@@ -148,3 +148,22 @@ func (c *Client) SendKey(key KeyCode, pressed bool) error {
 	}
 	return nil
 }
+
+// Send key presses and releases.
+func (c *Client) SendX11Key(key int, pressed bool) error {
+	if c.session.State != SessionActive {
+		return ErrNotConnected
+	}
+
+	p := "0"
+	if pressed {
+		p = "1"
+	}
+
+	keycode := strconv.Itoa(key)
+	err := c.session.Send(protocol.NewInstruction("key", keycode, p))
+	if err != nil {
+		return nil
+	}
+	return nil
+}
